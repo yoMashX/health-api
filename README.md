@@ -1,30 +1,39 @@
-# Healthcare API
+# Healthcare Management System
 
-A minimal healthcare system API built with Go and PostgreSQL, supporting patients, physicians, and prescription drugs with role-based access control.
+A full-stack healthcare system with Go API backend, PostgreSQL database, and React frontend, supporting patients, physicians, and prescription drugs with role-based access control.
 
 ## Features
 
+### Backend API
 - **Entities**: Patients, Physicians, Drugs, Prescriptions
 - **RBAC**: Role-based access control via `X-Role` header (physician|patient|admin)
 - **Endpoints**:
   - `POST /prescriptions`: Create new prescriptions (validation + authorization)
   - `GET /analytics/top-drugs`: Get top N drugs by quantity in date range
 
+### Frontend UI
+- **Authentication**: Role-based login system (fake auth with localStorage)
+- **Dashboard**: Role-aware interface with different views per user type
+- **Top Drugs Report**: Interactive charts and tables with data filtering
+
 ## Quick Start
 
 ### Using Docker Compose (Recommended)
 
 ```bash
-# Start the application and database
+# Start the full application stack
 docker compose up
 
-# The API will be available at http://localhost:8080
+# Access the application:
+# - Frontend UI: http://localhost:3000
+# - Backend API: http://localhost:8080
 ```
 
 This will:
 - Start a PostgreSQL database with the schema and seed data
-- Build and run the Go API server
-- Set up proper networking between services
+- Build and run the Go API server with CORS support
+- Build and run the React frontend with hot reload
+- Set up proper networking between all services
 
 ### Manual Setup
 
@@ -90,6 +99,41 @@ curl "http://localhost:8080/analytics/top-drugs?from=2024-01-01&to=2024-12-31&li
   -H "X-Role: physician" \
   -H "X-User-ID: 1"
 ```
+
+## Frontend Usage
+
+### Login System
+
+Access the web interface at `http://localhost:3000` and select your role:
+
+**Test Credentials:**
+- **Admin**: No ID required - full system access
+- **Physician**: Use IDs 1-5 (e.g., login as Physician with ID 1)
+- **Patient**: Use IDs 1-8 (e.g., login as Patient with ID 1)
+
+### Features by Role
+
+**Admin Dashboard:**
+- View all patients' prescription data in Top Drugs Report
+- See system-wide analytics and statistics
+
+**Physician Dashboard:**
+- View Top Drugs Report filtered to your assigned patients only
+- Dashboard shows patient management (placeholder)
+
+**Patient Dashboard:**
+- View your personal prescription history in Top Drugs Report
+- Data filtered to show only your own prescriptions
+
+### Top Drugs Report
+
+Interactive analytics screen featuring:
+- **Bar Charts**: Visual comparison of drug quantities and prescription counts
+- **Data Table**: Detailed breakdown with rankings and averages
+- **Date Filters**: Adjust reporting period (from/to dates)
+- **Result Limits**: Show top 5, 10, 15, or 20 drugs
+- **Responsive Design**: Works on desktop and mobile devices
+- **Accessibility**: Screen reader support and keyboard navigation
 
 ## Authorization Rules
 
